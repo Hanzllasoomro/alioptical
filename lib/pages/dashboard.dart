@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import './customerSearchScreen.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -86,13 +87,22 @@ class DashboardScreen extends StatelessWidget {
                         _DashboardButton(
                           icon: Icons.person_add,
                           label: "Add Customer",
-                          onTap: () {},
+                          onTap: () {
+
+                          },
                           isWide: isWide,
                         ),
                         _DashboardButton(
                           icon: Icons.search,
                           label: "Search Customer",
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const CustomerSearchScreen(),
+                              ),
+                            );
+                          },
                           isWide: isWide,
                         ),
                         _DashboardButton(

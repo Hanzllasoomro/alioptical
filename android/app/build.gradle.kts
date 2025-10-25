@@ -10,7 +10,7 @@ plugins {
 
 android {
     namespace = "com.example.alioptical"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 34
     ndkVersion = "29.0.13599879"
 
     compileOptions {
@@ -28,9 +28,9 @@ android {
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = 23
-        targetSdk = flutter.targetSdkVersion
-        versionCode = flutter.versionCode
-        versionName = flutter.versionName
+        targetSdk = 34
+        versionCode = 1
+        versionName = "1.0"
     }
 
     buildTypes {
