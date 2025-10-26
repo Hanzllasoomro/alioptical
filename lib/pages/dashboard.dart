@@ -64,6 +64,7 @@ class DashboardScreen extends StatelessWidget {
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(50),
                       bottomRight: Radius.circular(50),
+
                     ),
                   ),
                   child: Column(
@@ -90,7 +91,7 @@ class DashboardScreen extends StatelessWidget {
 
             const SizedBox(height: 30),
 
-            // 🔹 Grid buttons
+      
             Expanded(
               child: LayoutBuilder(
                 builder: (context, constraints) {
@@ -123,7 +124,15 @@ class DashboardScreen extends StatelessWidget {
                           icon: Icons.person_add,
                           label: "Add Customer",
                           onTap: () {},
-                          isWide: isWide,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const AddCustomerScreen(),
+                              ),
+                            );
+                          },
+           isWide: isWide,
                         ),
                         _DashboardButton(
                           icon: Icons.search,
