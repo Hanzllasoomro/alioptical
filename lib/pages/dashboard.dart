@@ -59,8 +59,6 @@ class DashboardScreen extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 30),
-
             // 🔹 Grid buttons (responsive layout)
             Expanded(
               child: LayoutBuilder(

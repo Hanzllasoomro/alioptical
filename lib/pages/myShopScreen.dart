@@ -1,3 +1,4 @@
+import 'package:alioptical/components/bottomNavBar.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import './editShopScreen.dart';
@@ -154,6 +155,7 @@ class MyShopScreen extends StatelessWidget {
           ],
         ),
       ),
+      bottomNavigationBar: const BottomNavBar(currentIndex: 2),
     );
   }
 
