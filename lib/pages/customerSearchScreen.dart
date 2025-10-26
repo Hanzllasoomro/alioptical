@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:alioptical/servers/auth/auth_service.dart';
+import '../components//bottomNavBar.dart';
 
 class CustomerSearchScreen extends StatefulWidget {
   const CustomerSearchScreen({Key? key}) : super(key: key);
@@ -80,6 +82,12 @@ class _CustomerSearchScreenState extends State<CustomerSearchScreen> {
     );
   }
 
+  void logout(){
+    final _authService= AuthService();
+    _authService.signOut();
+
+  }
+
   @override
   Widget build(BuildContext context) {
     final isWide = MediaQuery.of(context).size.width > 600;
@@ -99,7 +107,7 @@ class _CustomerSearchScreenState extends State<CustomerSearchScreen> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: logout,
             icon: const Icon(Icons.exit_to_app, color: Colors.white),
           )
         ],
@@ -196,23 +204,9 @@ class _CustomerSearchScreenState extends State<CustomerSearchScreen> {
         onPressed: () {},
         child: const Icon(Icons.add, color: Colors.white),
       ),
-      bottomNavigationBar: BottomAppBar(
-        shape: const CircularNotchedRectangle(),
-        notchMargin: 6,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: const [
-              _BottomNavItem(icon: Icons.build, label: "Repairing"),
-              SizedBox(width: 48), // Space for FAB
-              _BottomNavItem(icon: Icons.search, label: "Search", active: true),
-              _BottomNavItem(icon: Icons.storefront, label: "Shop"),
-            ],
-          ),
-        ),
-      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      
+      bottomNavigationBar: const BottomNavBar(currentIndex: 1),
     );
   }
 }
