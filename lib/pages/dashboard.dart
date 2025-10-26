@@ -5,7 +5,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import './customerSearchScreen.dart';
 import './myShopScreen.dart';
-import './addCustomerScreen.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -26,6 +25,7 @@ class DashboardScreen extends StatelessWidget {
     }
     return "Shop";
   }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -89,7 +89,9 @@ class DashboardScreen extends StatelessWidget {
               },
             ),
 
-            // 🔹 Grid buttons (responsive layout)
+            const SizedBox(height: 30),
+
+      
             Expanded(
               child: LayoutBuilder(
                 builder: (context, constraints) {
@@ -121,6 +123,7 @@ class DashboardScreen extends StatelessWidget {
                         _DashboardButton(
                           icon: Icons.person_add,
                           label: "Add Customer",
+                          onTap: () {},
                           onTap: () {
                             Navigator.push(
                               context,
@@ -129,7 +132,7 @@ class DashboardScreen extends StatelessWidget {
                               ),
                             );
                           },
-                          isWide: isWide,
+           isWide: isWide,
                         ),
                         _DashboardButton(
                           icon: Icons.search,
@@ -186,7 +189,6 @@ class DashboardScreen extends StatelessWidget {
                           },
                           isWide: isWide,
                         ),
-
                         _DashboardButton(
                           icon: Icons.power_settings_new,
                           label: "Logout",
