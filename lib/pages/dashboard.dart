@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import './customerSearchScreen.dart';
 import './myShopScreen.dart';
+import './addCustomerScreen.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -48,7 +49,7 @@ class DashboardScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    "Tariq Eye Corner",
+                    "Ali Optical",
                     style: GoogleFonts.poppins(
                       color: Colors.white,
                       fontSize: isWide ? 28 : 22,
@@ -92,7 +93,12 @@ class DashboardScreen extends StatelessWidget {
                           icon: Icons.person_add,
                           label: "Add Customer",
                           onTap: () {
-
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const AddCustomerScreen(),
+                              ),
+                            );
                           },
                           isWide: isWide,
                         ),
