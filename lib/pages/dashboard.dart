@@ -5,7 +5,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import './customerSearchScreen.dart';
 import './myShopScreen.dart';
-import './addCustomerScreen.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -56,15 +55,6 @@ class DashboardScreen extends StatelessWidget {
                     vertical: isWide ? 50 : 40,
                     horizontal: isWide ? 40 : 20,
                   ),
-<<<<<<< HEAD
-                  const SizedBox(height: 10),
-                  Text(
-                    "Ali Optical",
-                    style: GoogleFonts.poppins(
-                      color: Colors.white,
-                      fontSize: isWide ? 28 : 22,
-                      fontWeight: FontWeight.bold,
-=======
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(
                       colors: [Color(0xFFB71C1C), Color(0xFFD32F2F)],
@@ -74,7 +64,7 @@ class DashboardScreen extends StatelessWidget {
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(50),
                       bottomRight: Radius.circular(50),
->>>>>>> 075c833 (Authentication)
+
                     ),
                   ),
                   child: Column(
@@ -99,13 +89,9 @@ class DashboardScreen extends StatelessWidget {
               },
             ),
 
-<<<<<<< HEAD
-            // 🔹 Grid buttons (responsive layout)
-=======
             const SizedBox(height: 30),
 
-            // 🔹 Grid buttons
->>>>>>> 075c833 (Authentication)
+      
             Expanded(
               child: LayoutBuilder(
                 builder: (context, constraints) {
@@ -137,7 +123,7 @@ class DashboardScreen extends StatelessWidget {
                         _DashboardButton(
                           icon: Icons.person_add,
                           label: "Add Customer",
-<<<<<<< HEAD
+                          onTap: () {},
                           onTap: () {
                             Navigator.push(
                               context,
@@ -146,10 +132,7 @@ class DashboardScreen extends StatelessWidget {
                               ),
                             );
                           },
-=======
-                          onTap: () {},
->>>>>>> 075c833 (Authentication)
-                          isWide: isWide,
+           isWide: isWide,
                         ),
                         _DashboardButton(
                           icon: Icons.search,
