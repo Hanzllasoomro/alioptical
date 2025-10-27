@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -306,6 +307,14 @@ class _CustomerCard extends StatelessWidget {
                         onPressed: () async {
                           try {
                             final FirebaseFirestore firestore = FirebaseFirestore.instance;
+                            final user = FirebaseAuth.instance.currentUser;
+
+                            if (user == null) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text("No logged-in user found")),
+                              );
+                              return;
+                            }
 
                             // Determine which collection to query
                             final String category = data['category'] ?? 'Customers';
@@ -324,20 +333,11 @@ class _CustomerCard extends StatelessWidget {
                               return;
                             }
 
-                            final docData = docSnapshot.data() as Map<String, dynamic>?;
+                            // ✅ No need for userId/shopId from Firestore
+                            // Use the currently logged-in user
+                            final String userId = user.uid;
 
-                            if (docData == null ||
-                                !(docData.containsKey('userId') && docData.containsKey('shopId'))) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text("User or Shop ID missing in $collection document")),
-                              );
-                              return;
-                            }
-
-                            final String userId = docData['userId'];
-                            final String shopId = docData['shopId'];
-
-                            // ✅ Navigate to receipt screen
+                            // Navigate to the receipt screen
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -355,6 +355,7 @@ class _CustomerCard extends StatelessWidget {
                         },
                         icon: const Icon(Icons.remove_red_eye, color: Colors.blueAccent),
                       ),
+
                       IconButton(
                         onPressed: (){},
                         icon: const Icon(Icons.edit, color: Colors.orange),

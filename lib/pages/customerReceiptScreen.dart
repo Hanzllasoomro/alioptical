@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:printing/printing.dart';
 
@@ -35,17 +34,36 @@ class _CustomerReceiptScreenState extends State<CustomerReceiptScreen> {
           .doc(widget.userId)
           .get();
 
-      final customerSnap = await FirebaseFirestore.instance
-          .collection('customer')
+      DocumentSnapshot? customerSnap;
+
+      final opticsSnap = await FirebaseFirestore.instance
+          .collection('customers')
           .doc(widget.customerId)
           .get();
 
+      if (opticsSnap.exists) {
+        customerSnap = opticsSnap;
+      } else {
+        final repairingSnap = await FirebaseFirestore.instance
+            .collection('repairing_customers')
+            .doc(widget.customerId)
+            .get();
+        if (repairingSnap.exists) {
+          customerSnap = repairingSnap;
+        }
+      }
+
+      if (customerSnap == null || !customerSnap.exists) {
+        print("⚠️ Customer not found in either collection");
+        return;
+      }
+
       setState(() {
         userData = userSnap.data();
-        customerData = customerSnap.data();
+        customerData = customerSnap!.data() as Map<String, dynamic>?;
       });
     } catch (e) {
-      print('Error fetching Firestore data: $e');
+      print('❌ Error fetching Firestore data: $e');
     }
   }
 
@@ -83,7 +101,7 @@ class _CustomerReceiptScreenState extends State<CustomerReceiptScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Shop info (from Users)
+            // 🔹 Shop Info
             Text(
               userData!['shopName'] ?? 'Shop Name',
               style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
@@ -94,13 +112,12 @@ class _CustomerReceiptScreenState extends State<CustomerReceiptScreen> {
                 textAlign: TextAlign.center),
             const SizedBox(height: 20),
 
-            // Customer Information
+            // 🔹 Customer Info
             Align(
               alignment: Alignment.centerLeft,
-              child: Text(
+              child: const Text(
                 'Customer Information:',
-                style:
-                const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ),
             const SizedBox(height: 8),
@@ -122,34 +139,37 @@ class _CustomerReceiptScreenState extends State<CustomerReceiptScreen> {
             buildInfoRow('Lens', customerData!['lensDetails']),
             const SizedBox(height: 16),
 
-            // Vision section
+            // 🔹 Vision
             Align(
               alignment: Alignment.centerLeft,
-              child: Text('Vision:',
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold)),
+              child: const Text(
+                'Vision:',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
             ),
             const SizedBox(height: 8),
             buildVisionTable(customerData!),
             const SizedBox(height: 16),
 
-            // Financial details
+            // 🔹 Financial Details
             Align(
               alignment: Alignment.centerLeft,
-              child: Text('Financial Details:',
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold)),
+              child: const Text(
+                'Financial Details:',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
             ),
             const SizedBox(height: 8),
             buildFinanceTable(customerData!),
             const SizedBox(height: 20),
 
-            // Notes
+            // 🔹 Notes
             Align(
               alignment: Alignment.centerLeft,
-              child: Text('Note:',
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold)),
+              child: const Text(
+                'Note:',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
             ),
             const SizedBox(height: 8),
             const Text(
@@ -160,7 +180,7 @@ class _CustomerReceiptScreenState extends State<CustomerReceiptScreen> {
             ),
             const SizedBox(height: 24),
 
-            // Buttons
+            // 🔹 Buttons
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -180,21 +200,21 @@ class _CustomerReceiptScreenState extends State<CustomerReceiptScreen> {
                       return await Printing.convertHtml(
                         format: format,
                         html: '''
-                        <h1 style="text-align:center;">${userData!['shopName']}</h1>
-                        <p style="text-align:center;">${userData!['address']}<br>Ph: ${userData!['contactNumber']}</p>
-                        <hr>
-                        <h2>Customer Receipt</h2>
-                        <p><b>Name:</b> ${customerData!['name']}<br>
-                        <b>S.No:</b> ${customerData!['serialNo']}<br>
-                        <b>Phone:</b> ${customerData!['contact']}<br>
-                        <b>Date:</b> ${customerData!['date']}<br>
-                        <b>Due Date:</b> ${customerData!['dueDate']}<br>
-                        <b>Frame:</b> ${customerData!['frameDetails']}<br>
-                        <b>Lens:</b> ${customerData!['lensDetails']}</p>
-                        <h3>Financial Details</h3>
-                        <p>Total: ${customerData!['total']} Pkr<br>
-                        Advance: ${customerData!['advance']} Pkr<br>
-                        Balance: ${customerData!['balance']} Pkr</p>
+                          <h1 style="text-align:center;">${userData!['shopName']}</h1>
+                          <p style="text-align:center;">${userData!['address']}<br>Ph: ${userData!['contactNumber']}</p>
+                          <hr>
+                          <h2>Customer Receipt</h2>
+                          <p><b>Name:</b> ${customerData!['name']}<br>
+                          <b>S.No:</b> ${customerData!['serialNo']}<br>
+                          <b>Phone:</b> ${customerData!['contact']}<br>
+                          <b>Date:</b> ${customerData!['date']}<br>
+                          <b>Due Date:</b> ${customerData!['dueDate']}<br>
+                          <b>Frame:</b> ${customerData!['frameDetails']}<br>
+                          <b>Lens:</b> ${customerData!['lensDetails']}</p>
+                          <h3>Financial Details</h3>
+                          <p>Total: ${customerData!['total']} Pkr<br>
+                          Advance: ${customerData!['advance']} Pkr<br>
+                          Balance: ${customerData!['balance']} Pkr</p>
                         ''',
                       );
                     });
@@ -213,13 +233,13 @@ class _CustomerReceiptScreenState extends State<CustomerReceiptScreen> {
                   label: const Text('Share'),
                   onPressed: () {
                     final receiptText = '''
-                            Shop: ${userData!['shopName']}
-                            Customer: ${customerData!['name']}
-                            Frame: ${customerData!['frameDetails']}
-                            Lens: ${customerData!['lensDetails']}
-                            Total: ${customerData!['total']} Pkr
-                            Due Date: ${customerData!['dueDate']}
-                            ''';
+Shop: ${userData!['shopName']}
+Customer: ${customerData!['name']}
+Frame: ${customerData!['frameDetails']}
+Lens: ${customerData!['lensDetails']}
+Total: ${customerData!['total']} Pkr
+Due Date: ${customerData!['dueDate']}
+''';
                     Share.share(receiptText, subject: 'Customer Receipt');
                   },
                 ),
@@ -240,11 +260,13 @@ class _CustomerReceiptScreenState extends State<CustomerReceiptScreen> {
     );
   }
 
+  /// ✅ Fixed Vision Table — correctly reads from nested `eyeData` map
   Widget buildVisionTable(Map<String, dynamic> data) {
-    final right = data['right'] as Map<String, dynamic>? ?? {};
-    final left = data['left'] as Map<String, dynamic>? ?? {};
-    final add = data['add'] as Map<String, dynamic>? ?? {};
-    final ipd = data['ipd'] as Map<String, dynamic>? ?? {};
+    final eyeData = data['eyeData'] as Map<String, dynamic>? ?? {};
+    final right = eyeData['right'] as Map<String, dynamic>? ?? {};
+    final left = eyeData['left'] as Map<String, dynamic>? ?? {};
+    final add = eyeData['add'] as Map<String, dynamic>? ?? {};
+    final ipd = eyeData['ipd'] as Map<String, dynamic>? ?? {};
 
     return Table(
       border: TableBorder.all(color: Colors.black54),
@@ -277,13 +299,15 @@ class _CustomerReceiptScreenState extends State<CustomerReceiptScreen> {
           tableCell('ADD'),
           tableCell(add['add1'] ?? ''),
           tableCell(add['add2'] ?? ''),
-          tableCell('', colspan: 2),
+          tableCell(''),
+          tableCell(''),
         ]),
         TableRow(children: [
           tableCell('IPD'),
           tableCell(ipd['ipd1'] ?? ''),
           tableCell(ipd['ipd2'] ?? ''),
-          tableCell('', colspan: 2),
+          tableCell(''),
+          tableCell(''),
         ]),
       ],
     );
