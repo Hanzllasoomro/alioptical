@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/rendering.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -80,8 +81,20 @@ class _RepairingReceiptScreenState extends State<RepairingReceiptScreen> {
     if (userData == null || customerData == null) {
       return Scaffold(
         appBar: AppBar(
-          title: const Text('Repairing Receipt'),
+          automaticallyImplyLeading: true,
           backgroundColor: const Color(0xFFBA68C8),
+          elevation: 0,
+          title: Text(
+            "Repairing Receipt",
+            style: GoogleFonts.poppins(
+              color: Colors.white,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
         ),
         body: const Center(child: CircularProgressIndicator(color: Color(0xFFBA68C8))),
       );
@@ -165,9 +178,9 @@ class _RepairingReceiptScreenState extends State<RepairingReceiptScreen> {
                       ),
                       const SizedBox(height: 8),
                       const Text(
-                        '1. 50% Advance Required for Order Confirmation.\n'
+                        '1. 30% Advance Required for Order Confirmation.\n'
                             '2. No Refund on Completed Orders.\n'
-                            '3. Not Responsible for Damaged Frames or Lenses.',
+                            '3. Work may be delayed in case of broken glass or power outage.',
                         style: TextStyle(fontSize: 14, color: Colors.black87),
                       ),
                     ],

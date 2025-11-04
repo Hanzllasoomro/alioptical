@@ -313,7 +313,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
           hintText: hint,
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
         ),
-        keyboardType: TextInputType.text,
+        keyboardType: TextInputType.numberWithOptions(decimal: true),
       ),
     );
   }
@@ -491,7 +491,7 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                 spacing,
                 _buildEyeTable(),
                 spacing,
-                _buildTextField(label: 'Frame Details', controller: _frameController, hint: 'raybin-grey', prefix: const Icon(Icons.check_box)),
+                _buildTextField(label: 'Frame Details', controller: _frameController, hint: 'raybin-grey'),
                 spacing,
                 _buildTextField(label: 'Lens Details', controller: _lensController, hint: 'Lens description'),
                 spacing,
@@ -509,7 +509,53 @@ class _AddCustomerScreenState extends State<AddCustomerScreen> {
                   ],
                 ),
                 spacing,
-                _buildTextField(label: 'Balance', controller: _balanceController, hint: 'Calculated automatically', keyboardType: TextInputType.numberWithOptions(decimal: true), readOnly: true, prefix: const Icon(Icons.account_balance_wallet)),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    // Balance TextField
+                    Expanded(
+                      child: _buildTextField(
+                        label: 'Balance',
+                        controller: _balanceController,
+                        hint: 'Calculated automatically',
+                        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                        readOnly: true,
+                        prefix: const Icon(Icons.account_balance_wallet),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+
+                    // Paid button (bottom aligned)
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        final total = double.tryParse(_totalController.text.trim()) ?? 0.0;
+
+                        if (total <= 0) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text("Enter a valid total amount first")),
+                          );
+                          return;
+                        }
+
+                        _advanceController.text = total.toStringAsFixed(2);
+                        _balanceController.text = '0.00';
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text("Marked as fully paid")),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      icon: const Icon(Icons.check_circle, color: Colors.white, size: 18),
+                      label: const Text("Paid", style: TextStyle(color: Colors.white)),
+                    ),
+                  ],
+                ),
                 spacing,
                 Row(
                   children: [
